@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Command center</span>
+    <h2>Dashboard</h2>
+    <p class="subtle">Everything important stays in one place now.</p>
+  </div>
+  <div class="badge-row">
+    <span class="badge neutral">{{ stats.conference_count }} conferences</span>
+    <span class="badge neutral">{{ stats.file_count }} files</span>
+  </div>
+</div>
+
+<div class="grid two">
+  <section class="paper">
+    <div class="section-head">
+      <h3>Create Conference</h3>
+      <span class="subtle">Fixed date and time picker</span>
+    </div>
+    <form method="post" action="{{ url_for('create_conference') }}" class="stack-form">
+      <label>Conference name<input name="name" required></label>
+      <label>Committee<input name="committee" required></label>
+      <label>Country<input name="country" required></label>
+      <label>Topic<input name="topic" required></label>
+      <label>Date and time<input type="datetime-local" name="event_datetime" required></label>
+      <label>Summary<textarea name="summary" rows="4" placeholder="Main notes, goals, strategy..."></textarea></label>
+      <button class="btn primary" type="submit">Save conference</button>
+    </form>
+  </section>
+
+  <section class="paper">
+    <div class="section-head">
+      <h3>Research Library</h3>
+      <span class="subtle">Upload multiple files at once</span>
+    </div>
+    <form method="post" action="{{ url_for('upload_library') }}" enctype="multipart/form-data" class="stack-form">
+      <label>Choose files<input type="file" name="files" multiple accept=".txt,.pdf,.docx" required></label>
+      <button class="btn primary" type="submit">Upload to library</button>
+    </form>
+    <div class="list-block">
+      {% for file in files %}
+      <div class="list-row">
+        <div>
+          <strong>{{ file['original_name'] }}</strong>
+          <p>{{ file['file_type']|upper }} • {{ file['uploaded_at'] }}</p>
+        </div>
+        <a class="ghost-link" href="{{ url_for('download_file', file_id=file['id']) }}">Download</a>
+      </div>
+      {% else %}
+      <p class="subtle">No research uploaded yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<div class="grid two mt-24">
+  <section class="paper">
+    <div class="section-head"><h3>Your Conferences</h3></div>
+    <div class="list-block">
+      {% for c in conferences %}
+      <div class="list-row tall">
+        <div>
+          <strong>{{ c['name'] }}</strong>
+          <p>{{ c['committee'] }} • {{ c['country'] }}</p>
+          <p><strong>Topic:</strong> {{ c['topic'] }}</p>
+          <p><strong>Date:</strong> {{ c['event_datetime'] }}</p>
+          {% if c['summary'] %}<p>{{ c['summary'] }}</p>{% endif %}
+        </div>
+      </div>
+      {% else %}
+      <p class="subtle">No conferences saved yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="paper">
+    <div class="section-head"><h3>Tool Access</h3></div>
+    <div class="tool-grid">
+      <a class="tool-card" href="{{ url_for('speech_lab') }}"><strong>Speech Lab</strong><span>Evaluate speeches and tighten rhetoric.</span></a>
+      <a class="tool-card" href="{{ url_for('quiz') }}"><strong>Quiz Arena</strong><span>Generate practice questions from your material.</span></a>
+      <a class="tool-card" href="{{ url_for('crisis') }}"><strong>Crisis Simulator</strong><span>Practice emergency responses under pressure.</span></a>
+      <a class="tool-card" href="{{ url_for('debate') }}"><strong>Debate Arena</strong><span>Train against a simulated opponent country.</span></a>
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head"><div><span class="eyebrow">Direct clash</span><h2>Debate Arena</h2></div></div>
+<div class="grid two">
+  <section class="paper">
+    <form method="post" class="stack-form">
+      <label>Your country<input name="your_country" placeholder="Spain"></label>
+      <label>Opponent country<input name="opponent_country" placeholder="Türkiye"></label>
+      <label>Topic<input name="topic" placeholder="Cybersecurity as collective defence"></label>
+      <label>Select research files
+        <select name="file_ids" multiple size="8">
+          {% for file in files %}
+          <option value="{{ file['id'] }}">{{ file['original_name'] }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button class="btn primary">Start debate</button>
+    </form>
+  </section>
+  <section class="paper">
+    {% if result %}
+      <h3>Opponent opening</h3>
+      <div class="quote-box">{{ result.opener }}</div>
+      <h3>Pressure points</h3>
+      <ul class="clean-list">{% for item in result.pressure_points %}<li>{{ item }}</li>{% endfor %}</ul>
+      <h3>Your best counters</h3>
+      <ul class="clean-list">{% for item in result.best_counters %}<li>{{ item }}</li>{% endfor %}</ul>
+    {% else %}
+      <p class="subtle">Generate an opponent that actually challenges the logic of your research instead of echoing random file text.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero">
+  <div class="hero-panel paper">
+    <span class="eyebrow">Notion clarity • Parliament authority</span>
+    <h1>The MUN platform that actually feels complete.</h1>
+    <p>Create conferences, upload research, train with quizzes, run crisis drills, practice debates, and manage real users with a real admin system.</p>
+    <div class="cta-row">
+      <a class="btn primary" href="{{ url_for('signup') }}">Create account</a>
+      <a class="btn secondary" href="{{ url_for('login') }}">Log in</a>
+    </div>
+    <div class="feature-grid">
+      <div class="mini-card"><strong>Speech Lab</strong><span>AI-style feedback with fallback mode</span></div>
+      <div class="mini-card"><strong>Admin Control</strong><span>Upgrade users to premium manually</span></div>
+      <div class="mini-card"><strong>Study Hub</strong><span>Upload PDF, DOCX, TXT research</span></div>
+      <div class="mini-card"><strong>Debate Arena</strong><span>Train against simulated delegations</span></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

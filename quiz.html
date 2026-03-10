@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head"><div><span class="eyebrow">Study smart</span><h2>Quiz Arena</h2></div></div>
+<div class="grid two">
+  <section class="paper">
+    <form method="post" class="stack-form">
+      <label>Topic<input name="topic" placeholder="Cybersecurity as collective defence"></label>
+      <label>Select research files
+        <select name="file_ids" multiple size="8">
+          {% for file in files %}
+          <option value="{{ file['id'] }}">{{ file['original_name'] }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button class="btn primary">Generate quiz</button>
+    </form>
+  </section>
+  <section class="paper">
+    {% if quiz_data %}
+      <h3>Generated quiz{% if topic %} — {{ topic }}{% endif %}</h3>
+      <p class="subtle">Answers stay hidden until you submit or reveal them.</p>
+      {% for q in quiz_data %}
+      {% set qidx = loop.index0 %}
+      <div class="question-card quiz-card" data-answer="{{ q.answer|e }}">
+        <div class="question-meta">{{ q.kind }}</div>
+        <strong>Q{{ loop.index }}. {{ q.question }}</strong>
+        <p>{{ q.statement }}</p>
+        <div class="option-stack">
+          {% for opt in q.options %}
+          <label class="option-row">
+            <input type="radio" name="quiz_{{ qidx }}" value="{{ opt|e }}">
+            <span>{{ opt }}</span>
+          </label>
+          {% endfor %}
+        </div>
+        <div class="quiz-actions">
+          <button class="btn secondary quiz-submit" type="button">Submit answer</button>
+          <button class="btn ghost quiz-reveal" type="button">Reveal answer</button>
+        </div>
+        <div class="result-box hidden">
+          <strong class="result-title"></strong>
+          <p class="result-answer"></p>
+          <p class="subtle">{{ q.explanation }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="subtle">Pick a topic, optionally select files from your library, and the system will generate a quiz from actual research insights rather than raw text fragments.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

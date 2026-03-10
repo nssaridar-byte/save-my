@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center-wrap">
+  <div class="auth-card paper narrow">
+    <span class="eyebrow">Secure access</span>
+    <h2>{% if mode == 'signup' %}Create your account{% else %}Welcome back{% endif %}</h2>
+    <form method="post" class="stack-form">
+      {% if mode == 'signup' %}
+      <label>Name<input name="name" required></label>
+      {% endif %}
+      <label>Email<input type="email" name="email" required></label>
+      <label>Password<input type="password" name="password" required></label>
+      <button class="btn primary" type="submit">{% if mode == 'signup' %}Sign up{% else %}Log in{% endif %}</button>
+    </form>
+    <p class="subtle">
+      {% if mode == 'signup' %}
+      Already have an account? <a href="{{ url_for('login') }}">Log in</a>
+      {% else %}
+      Need an account? <a href="{{ url_for('signup') }}">Sign up</a>
+      {% endif %}
+    </p>
+  </div>
+</div>
+{% endblock %}

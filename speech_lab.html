@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head"><div><span class="eyebrow">AI rhetoric</span><h2>Speech Lab</h2></div></div>
+<div class="grid two">
+  <section class="paper">
+    <form method="post" class="stack-form">
+      <label>Paste your speech<textarea name="speech_text" rows="16" placeholder="Paste your full speech here..." required></textarea></label>
+      <button class="btn primary">Analyze speech</button>
+    </form>
+  </section>
+  <section class="paper">
+    {% if result %}
+      <div class="score-box">Score <span>{{ result.score }}/100</span></div>
+      <h3>Strengths</h3>
+      <ul class="clean-list">{% for item in result.strengths %}<li>{{ item }}</li>{% endfor %}</ul>
+      <h3>Improve</h3>
+      <ul class="clean-list">{% for item in result.improvements %}<li>{{ item }}</li>{% endfor %}</ul>
+      <h3>Suggested opening</h3>
+      <div class="quote-box">{{ result.revised_opening }}</div>
+    {% else %}
+      <p class="subtle">Paste a speech and get a clear score, strengths, improvements, and a sharper opening line.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

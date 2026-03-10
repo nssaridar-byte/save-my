@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head"><div><span class="eyebrow">Pressure training</span><h2>Crisis Simulator</h2></div></div>
+<div class="grid two">
+  <section class="paper">
+    <form method="post" class="stack-form">
+      <label>Topic<input name="topic" placeholder="Cross-border cyber escalation"></label>
+      <label>Country<input name="country" placeholder="Spain"></label>
+      <label>Committee<input name="committee" placeholder="NATO"></label>
+      <label>Select research files
+        <select name="file_ids" multiple size="8">
+          {% for file in files %}
+          <option value="{{ file['id'] }}">{{ file['original_name'] }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button class="btn primary">Generate crisis</button>
+    </form>
+  </section>
+  <section class="paper">
+    {% if result %}
+      <h3>Scenario</h3>
+      <p>{{ result.scenario }}</p>
+      <h3>Intel</h3>
+      <p>{{ result.intel }}</p>
+      <h3>Your objectives</h3>
+      <ul class="clean-list">{% for item in result.tasks %}<li>{{ item }}</li>{% endfor %}</ul>
+      <h3>What strong delegates use</h3>
+      <ul class="clean-list">{% for item in result.benchmarks %}<li>{{ item }}</li>{% endfor %}</ul>
+    {% else %}
+      <p class="subtle">Generate a fast, realistic scenario built from your research positions, risks, and likely policy moves.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

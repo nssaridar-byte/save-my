@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head"><div><span class="eyebrow">Super admin</span><h2>Admin Control</h2></div></div>
+<div class="grid four compact-stats">
+  <div class="paper stat-box"><strong>{{ platform_stats.users }}</strong><span>Total users</span></div>
+  <div class="paper stat-box"><strong>{{ platform_stats.premium }}</strong><span>Premium users</span></div>
+  <div class="paper stat-box"><strong>{{ platform_stats.conferences }}</strong><span>Conferences saved</span></div>
+  <div class="paper stat-box"><strong>{{ platform_stats.files }}</strong><span>Library files</span></div>
+</div>
+
+<div class="grid two mt-24">
+  <section class="paper wide">
+    <div class="section-head"><h3>User management</h3></div>
+    <div class="admin-users">
+      {% for user in users %}
+      <form class="admin-user-card" method="post" action="{{ url_for('admin_update_user', user_id=user['id']) }}">
+        <div class="admin-user-top">
+          <div>
+            <strong>{{ user['name'] }}</strong>
+            <p>{{ user['email'] }}</p>
+            <p class="subtle">Joined {{ user['created_at'] }}</p>
+          </div>
+          <span class="badge {{ user['plan'] }}">{{ user['role'] }} • {{ user['plan'] }}</span>
+        </div>
+        <div class="admin-controls">
+          <label>Plan
+            <select name="plan">
+              <option value="free" {% if user['plan']=='free' %}selected{% endif %}>Free</option>
+              <option value="premium" {% if user['plan']=='premium' %}selected{% endif %}>Premium</option>
+            </select>
+          </label>
+          <label>Role
+            <select name="role">
+              <option value="user" {% if user['role']=='user' %}selected{% endif %}>User</option>
+              <option value="admin" {% if user['role']=='admin' %}selected{% endif %}>Admin</option>
+            </select>
+          </label>
+          <label>Status
+            <select name="is_active">
+              <option value="1" {% if user['is_active'] %}selected{% endif %}>Active</option>
+              <option value="0" {% if not user['is_active'] %}selected{% endif %}>Suspended</option>
+            </select>
+          </label>
+        </div>
+        <div class="usage-mini">
+          <span>Quiz {{ user['usage_quiz'] }}</span>
+          <span>Crisis {{ user['usage_crisis'] }}</span>
+          <span>Debate {{ user['usage_debate'] }}</span>
+          <span>Speech {{ user['usage_speech'] }}</span>
+        </div>
+        <div class="admin-action-row">
+          <button class="btn primary" type="submit">Save changes</button>
+        </form>
+          <form method="post" action="{{ url_for('admin_delete_user', user_id=user['id']) }}" onsubmit="return confirm('Delete this user?')">
+            <button class="btn danger" type="submit">Delete</button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="paper">
+    <div class="section-head"><h3>Recent activity</h3></div>
+    <div class="list-block">
+      {% for log in recent_logs %}
+      <div class="list-row tall">
+        <div>
+          <strong>{{ log['action'] }}</strong>
+          <p>{{ log['email'] or 'system' }}</p>
+          {% if log['details'] %}<p>{{ log['details'] }}</p>{% endif %}
+          <p class="subtle">{{ log['created_at'] }}</p>
+        </div>
+      </div>
+      {% else %}
+      <p class="subtle">No activity yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}
